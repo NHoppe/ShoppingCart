@@ -1,0 +1,43 @@
+﻿@model ShoppingCartProject.Models.CartItemModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h2>Add</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <table class="table">
+
+        <tr>
+            <td>
+                #@Html.DisplayFor(Model => Model.ProductID)
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model.ProductName)
+            </td>
+            <td>
+                $@Html.DisplayFor(Model => Model.Price)
+            </td>
+
+            <td>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", min = 1 } })
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    @Html.ActionLink("Update", "Update", new { @prodId = Model.ProductID, @qty = Model.Quantity}, null);
+
+    @Html.ActionLink("Cancel", "Index");
+}
