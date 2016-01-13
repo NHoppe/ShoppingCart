@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace ShoppingCartProject.BusinessLogic
+namespace ShoppingCartProject.BusinessLogic.Constants
 {
     public class CartRules
     {

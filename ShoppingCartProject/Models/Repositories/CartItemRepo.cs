@@ -1,4 +1,4 @@
-﻿using ShoppingCartProject.BusinessLogic;
+﻿using ShoppingCartProject.BusinessLogic.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,7 @@ namespace ShoppingCartProject.Models.Repositories
             this.prodRepo = prodRepo;
         }
 
-        // TODO: Add Session in method parameters
-        public CartItemModel GetCartItem(int id)
+        public CartItemModel GetCartItem(int id, int qty = CartRules.DEFAULT_QTY)
         {
             Product prod = prodRepo.GetProduct(id);
 
@@ -24,26 +23,23 @@ namespace ShoppingCartProject.Models.Repositories
             item.ProductID = prod.productID;
             item.ProductName = prod.productName;
             item.Price = (decimal)prod.price;
-            item.Quantity = CartRules.DEFAULT_QTY; // TODO: Check Session Qty
+            item.Quantity = qty;
 
             return item;
         }
 
-        // TODO: Add Session in method parameters
-        public IEnumerable<CartItemModel> GetAllCartItems()
+        public IEnumerable<CartItemModel> GetAllCartItems(Dictionary<int, int> sessionCart)
         {
-            //TODO: Review/remove fake code below
-            List<int> cartItems = new List<int> { 107, 329 };
-            
             List<CartItemModel> cartItemsList = new List<CartItemModel>();
 
-            foreach (int prodId in cartItems)
+            foreach (KeyValuePair<int, int> sessionCartItem in sessionCart)
             {
-                cartItemsList.Add(GetCartItem(prodId));
+                // Key = ProdID; Value = Qty
+                CartItemModel cartItem = GetCartItem(sessionCartItem.Key, sessionCartItem.Value);
+                cartItemsList.Add(cartItem);
             }
-
+            
             return cartItemsList;
-            //TODO: -------------
         }
     }
 }

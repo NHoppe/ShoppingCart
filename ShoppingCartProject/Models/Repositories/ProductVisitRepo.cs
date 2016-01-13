@@ -5,21 +5,29 @@ using System.Web;
 
 namespace ShoppingCartProject.Models.Repositories
 {
-    public class ProductVisitRepo
+    public class ProductVisitRepo : BaseRepoClass
     {
-        A00964856_ShoppingCartEntities db;
-
-        public ProductVisitRepo(A00964856_ShoppingCartEntities database)
+        public ProductVisitRepo(A00964856_ShoppingCartEntities database): base(database)
         {
-            this.db = database;
         }
 
         public void ClearProductVisitsOlderThan(DateTime time)
         {
             IEnumerable <ProductVisit> pVisits = from pv in db.ProductVisits
-                                                   where pv.updated >= time
+                                                   where pv.updated <= time
                                                    select pv;
             db.ProductVisits.RemoveRange(pVisits);
+            db.SaveChanges();
+        }
+
+        public void AddProductVisit(Visit visit, Product prod, int qty)
+        {
+            ProductVisit prodVisit = new ProductVisit();
+            prodVisit.Product = prod;
+            prodVisit.Visit = visit;
+            prodVisit.qtyOrdered = qty;
+            prodVisit.updated = DateTime.Now;
+            db.ProductVisits.Add(prodVisit);
             db.SaveChanges();
         }
     }

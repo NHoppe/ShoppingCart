@@ -7,8 +7,7 @@
 
 <h2>Add</h2>
 
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("Update", "Home"))
 {
     @Html.AntiForgeryToken()
 
@@ -17,12 +16,15 @@
         <tr>
             <td>
                 #@Html.DisplayFor(Model => Model.ProductID)
+                @Html.HiddenFor(Model => Model.ProductID)
             </td>
             <td>
                 @Html.DisplayFor(Model => Model.ProductName)
+                @Html.HiddenFor(Model => Model.ProductName)
             </td>
             <td>
                 $@Html.DisplayFor(Model => Model.Price)
+                @Html.HiddenFor(Model => Model.Price)
             </td>
 
             <td>
@@ -37,7 +39,7 @@
         </tr>
     </table>
 
-    @Html.ActionLink("Update", "Update", new { @prodId = Model.ProductID, @qty = Model.Quantity}, null);
+    <input type="submit" value="Update" />
 
     @Html.ActionLink("Cancel", "Index");
 }

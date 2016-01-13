@@ -126,13 +126,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="BusinessLogic\CartRules.cs" />
-    <Compile Include="BusinessLogic\SessionManager.cs" />
+    <Compile Include="BusinessLogic\Constants\CartRules.cs" />
+    <Compile Include="BusinessLogic\SessionHelper.cs" />
+    <Compile Include="BusinessLogic\Constants\SessionRules.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\Repositories\BaseRepoClass.cs" />
     <Compile Include="Models\Repositories\CartItemRepo.cs" />
     <Compile Include="Models\Repositories\ProductRepo.cs" />
     <Compile Include="Models\Repositories\ProductVisitRepo.cs" />

@@ -1,4 +1,5 @@
-﻿using ShoppingCartProject.Models;
+﻿using ShoppingCartProject.BusinessLogic;
+using ShoppingCartProject.Models;
 using ShoppingCartProject.Models.Repositories;
 using System;
 using System.Collections.Generic;
@@ -30,27 +31,39 @@ namespace ShoppingCartProject.Controllers
             return View(item);
         }
 
-        [HttpGet]
-        public ActionResult Update(int prodId, int qty)
+        [HttpPost]
+        public ActionResult Update(CartItemModel cartItem)
         {
-            if (qty < 1)
+            if (cartItem.Quantity < 1)
             {
-                return RedirectToAction("WrongQty", new { prodId = prodId, qty = qty });
+                return RedirectToAction("WrongQty", new { prodId = cartItem.ProductID, qty = cartItem.Quantity});
             }
-            // TODO: Add Item to Session;
+            SessionHelper sessionHlp = new SessionHelper();
+            sessionHlp.AddProductToCart(cartItem.ProductID, cartItem.Quantity);
+
+            A00964856_ShoppingCartEntities db = new A00964856_ShoppingCartEntities();
+
+            ProductRepo prodRepo = new ProductRepo(db);
+            VisitRepo visitRepo = new VisitRepo(db);
+            ProductVisitRepo prodVisitRepo = new ProductVisitRepo(db);
+
+            Visit visit = visitRepo.GetVisit(sessionHlp.SessionID);
+            Product product = prodRepo.GetProduct(cartItem.ProductID);
+            prodVisitRepo.AddProductVisit(visit, product, cartItem.Quantity);
+            
             return RedirectToAction("ViewCart");
         }
 
         [HttpGet]
         public ActionResult ViewCart()
         {
-            // TODO: Read IDs and Qtys from Session
-            // TODO: Remove fake code below
+            SessionHelper sessionHlp = new SessionHelper();
+            Dictionary<int, int> sessionCart = sessionHlp.GetCart();
+            
             A00964856_ShoppingCartEntities db = new A00964856_ShoppingCartEntities();
             ProductRepo prodRepo = new ProductRepo(db);
             CartItemRepo cartItemRepo = new CartItemRepo(prodRepo);
-            IEnumerable<CartItemModel> cartItems = cartItemRepo.GetAllCartItems();
-            // TODO: -------
+            IEnumerable<CartItemModel> cartItems = cartItemRepo.GetAllCartItems(sessionCart);
 
             return View(cartItems);
         }

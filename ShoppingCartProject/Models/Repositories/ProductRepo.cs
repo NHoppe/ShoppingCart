@@ -5,13 +5,10 @@ using System.Web;
 
 namespace ShoppingCartProject.Models.Repositories
 {
-    public class ProductRepo
+    public class ProductRepo : BaseRepoClass
     {
-        A00964856_ShoppingCartEntities db;
-
-        public ProductRepo(A00964856_ShoppingCartEntities database)
+        public ProductRepo(A00964856_ShoppingCartEntities database) : base(database)
         {
-            this.db = database;
         }
 
         public IEnumerable<Product> GetProducts()
