@@ -23,21 +23,31 @@ namespace ShoppingCartProject.Controllers
         [HttpGet]
         public ActionResult Add(int prodId)
         {
+            SessionHelper sessonHlp = new SessionHelper();
+            int qty = sessonHlp.GetProductQtyFromCart(prodId);
+
             A00964856_ShoppingCartEntities db = new A00964856_ShoppingCartEntities();
             ProductRepo prodRepo = new ProductRepo(db);
             CartItemRepo cartItemRepo = new CartItemRepo(prodRepo);
-            CartItemModel item = cartItemRepo.GetCartItem(prodId);
+            CartItemModel item = cartItemRepo.GetCartItem(prodId, qty);
 
             return View(item);
         }
 
-        [HttpPost]
-        public ActionResult Update(CartItemModel cartItem)
+        [HttpGet]
+        public ActionResult Remove(int prodId)
         {
-            if (cartItem.Quantity < 1)
-            {
-                return RedirectToAction("WrongQty", new { prodId = cartItem.ProductID, qty = cartItem.Quantity});
+            SessionHelper sessionHlp = new SessionHelper();
+            sessionHlp.RemoveProductFromCart(prodId);
+            return RedirectToAction("ViewCart");
+        }
+        
+        private bool UpdateCart(CartItemModel cartItem)
+        {
+            if (cartItem.Quantity < 1) {
+                return false;
             }
+
             SessionHelper sessionHlp = new SessionHelper();
             sessionHlp.AddProductToCart(cartItem.ProductID, cartItem.Quantity);
 
@@ -50,8 +60,36 @@ namespace ShoppingCartProject.Controllers
             Visit visit = visitRepo.GetVisit(sessionHlp.SessionID);
             Product product = prodRepo.GetProduct(cartItem.ProductID);
             prodVisitRepo.AddProductVisit(visit, product, cartItem.Quantity);
+
+            return true;
+        }
+
+        [HttpPost]
+        public ActionResult Update(CartItemModel cartItem)
+        {
+            if (!UpdateCart(cartItem))
+            {
+                return RedirectToAction("WrongQty", new { prodId = cartItem.ProductID, qty = cartItem.Quantity });
+            }
             
             return RedirectToAction("ViewCart");
+        }
+
+        [HttpPost]
+        public ActionResult SaveOrder(CheckoutCartModel checkoutCart)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (CartItemModel cartItem in checkoutCart.CartItems)
+                {
+                    if (!UpdateCart(cartItem))
+                    {
+                        return RedirectToAction("WrongQty", new { prodId = cartItem.ProductID, qty = cartItem.Quantity });
+                    }
+                }
+            }
+
+            return RedirectToAction("ThankYou");
         }
 
         [HttpGet]
@@ -63,11 +101,44 @@ namespace ShoppingCartProject.Controllers
             A00964856_ShoppingCartEntities db = new A00964856_ShoppingCartEntities();
             ProductRepo prodRepo = new ProductRepo(db);
             CartItemRepo cartItemRepo = new CartItemRepo(prodRepo);
-            IEnumerable<CartItemModel> cartItems = cartItemRepo.GetAllCartItems(sessionCart);
+            List<CartItemModel> cartItems = cartItemRepo.GetAllCartItems(sessionCart);
 
-            return View(cartItems);
+            CheckoutCartModel checkoutCart = new CheckoutCartModel();
+            checkoutCart.CartItems = cartItems;
+
+            return View(checkoutCart);
         }
 
+        [HttpGet]
+        public ActionResult Checkout()
+        {
+            return RedirectToAction("ThankYou");
+        }
+
+        [HttpGet]
+        public ActionResult ThankYou()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CancelOrder()
+        {
+            SessionHelper sessionHlp = new SessionHelper();
+
+            A00964856_ShoppingCartEntities db = new A00964856_ShoppingCartEntities();
+
+            VisitRepo visitRepo = new VisitRepo(db);
+            visitRepo.ClearVisit(sessionHlp.SessionID);
+
+            sessionHlp.Clear();
+
+            return RedirectToAction("ThankYou");
+        }
+
+        //*************************************************
+        // ERROR DISPLAY
+        //*************************************************
         [HttpGet]
         public ActionResult WrongQty(int? prodId, int? qty)
         {

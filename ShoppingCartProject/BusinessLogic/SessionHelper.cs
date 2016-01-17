@@ -56,11 +56,34 @@ namespace ShoppingCartProject.BusinessLogic
             {
                 HttpContext.Current.Session.Add(SESSION_PRODUCTS, new Dictionary<int, int>());
             }
+
             Dictionary<int, int> myCart = (Dictionary<int, int>)HttpContext.Current.Session[SESSION_PRODUCTS];
-            myCart.Add(id, qty);
+
+            if (myCart.ContainsKey(id))
+            {
+                myCart[id] = qty;
+            } else
+            {
+                myCart.Add(id, qty);
+            }
+
             HttpContext.Current.Session[SESSION_PRODUCTS] = myCart;
         }
         
+        public int GetProductQtyFromCart(int id)
+        {
+            if (HttpContext.Current.Session[SESSION_PRODUCTS] != null)
+            {
+                Dictionary<int, int> myCart = (Dictionary<int, int>)HttpContext.Current.Session[SESSION_PRODUCTS];
+
+                if (myCart.ContainsKey(id))
+                {
+                    return myCart[id];
+                }
+            }
+            return 1;
+        }
+
         public void RemoveProductFromCart(int id)
         {
             if (HttpContext.Current.Session[SESSION_PRODUCTS] != null)
@@ -73,7 +96,11 @@ namespace ShoppingCartProject.BusinessLogic
 
         public Dictionary<int, int> GetCart()
         {
-            return (Dictionary<int, int>)HttpContext.Current.Session[SESSION_PRODUCTS];
+            if (HttpContext.Current.Session[SESSION_PRODUCTS] != null)
+            {
+                return (Dictionary<int, int>)HttpContext.Current.Session[SESSION_PRODUCTS];
+            }
+            return new Dictionary<int, int>();
         }
 
         public void Clear()

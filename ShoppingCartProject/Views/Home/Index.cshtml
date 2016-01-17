@@ -18,6 +18,9 @@
             #@Html.DisplayFor(modelItem => item.productID)
         </td>
         <td>
+            <img class="viewCartImg" src="~/Content/Images/Products/@(item.productID).png" alt="Product #@item.productID image" width="100" height="100" />
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.productName)
         </td>
         <td>

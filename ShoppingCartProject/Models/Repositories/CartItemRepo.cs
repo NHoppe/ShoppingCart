@@ -28,7 +28,7 @@ namespace ShoppingCartProject.Models.Repositories
             return item;
         }
 
-        public IEnumerable<CartItemModel> GetAllCartItems(Dictionary<int, int> sessionCart)
+        public List<CartItemModel> GetAllCartItems(Dictionary<int, int> sessionCart)
         {
             List<CartItemModel> cartItemsList = new List<CartItemModel>();
 

@@ -13,11 +13,32 @@ namespace ShoppingCartProject.Models.Repositories
 
         public void RegisterNewVisit(string sessionID, DateTime startTime)
         {
-            Visit visit = new Visit();
-            visit.sessionID = sessionID;
-            visit.started = startTime;
-            db.Visits.Add(visit);
-            db.SaveChanges();
+            Visit visitData = (from v in db.Visits
+                           where v.sessionID == sessionID
+                           select v).FirstOrDefault();
+
+            if (visitData == null)
+            {
+                Visit visit = new Visit();
+                visit.sessionID = sessionID;
+                visit.started = startTime;
+                db.Visits.Add(visit);
+                db.SaveChanges();
+            }
+        }
+
+        public void ClearVisit(string sessionID)
+        {
+            Visit visitToDelete = (from v in db.Visits
+                                   where v.sessionID == sessionID
+                                   select v).FirstOrDefault();
+
+            if (visitToDelete != null)
+            {
+                visitToDelete.ProductVisits.Clear();
+                db.Visits.Remove(visitToDelete);
+                db.SaveChanges();
+            }
         }
 
         public Visit GetVisit(string sessionID)
@@ -34,8 +55,8 @@ namespace ShoppingCartProject.Models.Repositories
                                                 where (pv.sessionID == v.sessionID && pv.updated <= time) ||
                                                         (v.ProductVisits.Count == 0 && v.started <= time)
                                                 select v;
-            
-            foreach(Visit visit in visitsToDelete)
+
+            foreach (Visit visit in visitsToDelete)
             {
                 visit.ProductVisits.Clear();
             }
@@ -47,9 +68,9 @@ namespace ShoppingCartProject.Models.Repositories
         public void RemoveSessionID(string sessionID)
         {
             Visit visit = (from v in db.Visits
-                          where v.sessionID == sessionID
-                          select v).FirstOrDefault();
-            if(visit != null)
+                           where v.sessionID == sessionID
+                           select v).FirstOrDefault();
+            if (visit != null)
             {
                 db.Visits.Remove(visit);
             }

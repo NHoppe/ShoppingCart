@@ -99,6 +99,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\Products\107.png" />
+    <Content Include="Content\Images\Products\218.png" />
+    <Content Include="Content\Images\Products\329.png" />
     <Content Include="Content\Images\Store_Logo.png" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -134,6 +137,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CartItemModel.cs" />
+    <Compile Include="Models\CheckoutCartModel.cs" />
     <Compile Include="Models\Repositories\BaseRepoClass.cs" />
     <Compile Include="Models\Repositories\CartItemRepo.cs" />
     <Compile Include="Models\Repositories\ProductRepo.cs" />
@@ -178,6 +182,7 @@
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\ThankYou.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

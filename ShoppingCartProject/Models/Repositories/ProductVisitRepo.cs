@@ -22,12 +22,22 @@ namespace ShoppingCartProject.Models.Repositories
 
         public void AddProductVisit(Visit visit, Product prod, int qty)
         {
-            ProductVisit prodVisit = new ProductVisit();
-            prodVisit.Product = prod;
-            prodVisit.Visit = visit;
-            prodVisit.qtyOrdered = qty;
-            prodVisit.updated = DateTime.Now;
-            db.ProductVisits.Add(prodVisit);
+            ProductVisit prodVisitData = (from pv in db.ProductVisits
+                                          where pv.sessionID == visit.sessionID && pv.productID == prod.productID
+                                          select pv).FirstOrDefault();
+            if (prodVisitData == null)
+            {
+                ProductVisit prodVisit = new ProductVisit();
+                prodVisit.Product = prod;
+                prodVisit.Visit = visit;
+                prodVisit.qtyOrdered = qty;
+                prodVisit.updated = DateTime.Now;
+                db.ProductVisits.Add(prodVisit);
+            } else
+            {
+                prodVisitData.qtyOrdered = qty;
+                prodVisitData.updated = DateTime.Now;
+            }
             db.SaveChanges();
         }
     }
