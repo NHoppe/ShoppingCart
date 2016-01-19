@@ -1,0 +1,34 @@
+﻿@media screen and (max-width: 480px), screen and (max-height: 320px) {
+    .shoppingCartFix {
+        padding: 0 !important;
+    }
+
+    .addTableAlignment {
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .viewCartImg {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media screen and (min-width: 480px) {
+    .viewCartImg {
+        width: 100px;
+        height: 100px;
+    }
+
+
+@media screen and (min-width: 640px) {
+    .viewCartImg {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+.addTableAlignment {
+    padding: 15px;
+}

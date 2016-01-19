@@ -5,44 +5,46 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>Add</h2>
+<div class="col-sm-offset-1 col-md-offset-2 col-lg-offset-3 col-xl-offset-4 col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+    <h2>Add product</h2>
 
-@using (Html.BeginForm("Update", "Home"))
-{
-    @Html.AntiForgeryToken()
+    @using (Html.BeginForm("Update", "Home"))
+    {
+        @Html.AntiForgeryToken()
 
-    <table class="table">
+        <table class="table">
 
-        <tr>
-            <td>
-                #@Html.DisplayFor(Model => Model.ProductID)
-                @Html.HiddenFor(Model => Model.ProductID)
-            </td>
-            <td>
-                <img class="viewCartImg" src="~/Content/Images/Products/@(Model.ProductID).png" alt="Product #@Model.ProductID image" width="100" height="100" />
-            </td>
-            <td>
-                @Html.DisplayFor(Model => Model.ProductName)
-                @Html.HiddenFor(Model => Model.ProductName)
-            </td>
-            <td>
-                $@Html.DisplayFor(Model => Model.Price)
-                @Html.HiddenFor(Model => Model.Price)
-            </td>
+            <tr>
+                <td>
+                    #@Html.DisplayFor(Model => Model.ProductID)
+                    @Html.HiddenFor(Model => Model.ProductID)
+                </td>
+                <td>
+                    <img class="viewCartImg" src="~/Content/Images/Products/@(Model.ProductID).png" alt="Product #@Model.ProductID image" />
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => Model.ProductName)
+                    @Html.HiddenFor(Model => Model.ProductName)
+                </td>
+                <td>
+                    $@Html.DisplayFor(Model => Model.Price)
+                    @Html.HiddenFor(Model => Model.Price)
+                </td>
 
-            <td>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", min = 1 } })
-                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                <td>
+                    <div class="form-group">
+                        <label class="col-md-3">Quantity: </label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", min = 1 } })
+                            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
 
-    <input type="submit" value="Update" />
+        <input type="submit" value="Update" class="btn btn-primary"/>
 
-    @Html.ActionLink("Cancel", "Index");
-}
+        @Html.ActionLink("Cancel", "Index", new { }, new { @class = "btn btn-danger" });
+    }
+</div>

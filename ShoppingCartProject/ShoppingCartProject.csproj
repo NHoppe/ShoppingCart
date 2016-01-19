@@ -103,6 +103,7 @@
     <Content Include="Content\Images\Products\218.png" />
     <Content Include="Content\Images\Products\329.png" />
     <Content Include="Content\Images\Store_Logo.png" />
+    <Content Include="Content\Styles\StoreStyle.css" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

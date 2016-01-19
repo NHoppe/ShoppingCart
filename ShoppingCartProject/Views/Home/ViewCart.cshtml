@@ -5,59 +5,67 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>My Shopping Cart</h2>
+<div class="shoppingCartFix col-sm-offset-1 col-md-offset-2 col-lg-offset-3 col-xl-offset-4 col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
 
+    <h2>My Shopping Cart</h2>
 
+    @using (Html.BeginForm("SaveOrder", "Home"))
+    {
+        @Html.AntiForgeryToken()
 
-@using (Html.BeginForm("SaveOrder", "Home"))
-{
-    @Html.AntiForgeryToken()
-
-    <table class="table">
-        @foreach (var item in Model.CartItems)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink("Remove", "Remove", new { prodId = item.ProductID })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductID)
-                    @Html.HiddenFor(modelItem => item.ProductID)
-                </td>
-                <th>
-                    <img class="viewCartImg" src="~/Content/Images/Products/@(item.ProductID).png" alt="Product #@item.ProductID image" width="100" height="100" />
-                </th>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                    @Html.HiddenFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    $@Html.DisplayFor(modelItem => item.Price)
-                    @Html.HiddenFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <div class="form-group">
-                        <label class="control-label col-md-2">Qty: </label>
-                        <div class="col-md-10">
-                            @Html.EditorFor(modelItem => item.Quantity, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(modelItem => item.Quantity, "", new { @class = "text-danger" })
+        <table class="table">
+            @for (var i = 0; i < Model.CartItems.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <div class="hidden-xs">
+                            @Html.ActionLink("Remove", "Remove", new { prodId = Model.CartItems[i].ProductID }, new { @class = "btn btn-warning" })
                         </div>
-                    </div>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubTotal)
-                </td>
-            </tr>
-        }
-    </table>
+                        <div class="hidden-sm hidden-md hidden-lg hidden-xl">
+                            @Html.ActionLink("Remove", "Remove", new { prodId = Model.CartItems[i].ProductID })
+                        </div>
+                    </td>
+                    <td>
+                        #@Html.DisplayFor(modelItem => Model.CartItems[i].ProductID)
+                        @Html.HiddenFor(modelItem => Model.CartItems[i].ProductID)
+                    </td>
+                    <td class="hidden-xs">
+                        <img class="viewCartImg" src="~/Content/Images/Products/@(Model.CartItems[i].ProductID).png" alt="Product #@Model.CartItems[i].ProductID image" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.CartItems[i].ProductName)
+                        @Html.HiddenFor(modelItem => Model.CartItems[i].ProductName)
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => Model.CartItems[i].Price)
+                        @Html.HiddenFor(modelItem => Model.CartItems[i].Price)
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label class="col-md-3">Quantity: </label>
+                            <div class="col-md-9">
+                                @Html.EditorFor(modelItem => Model.CartItems[i].Quantity, new { htmlAttributes = new { @class = "form-control", min = 1 } })
+                                @Html.ValidationMessageFor(modelItem => Model.CartItems[i].Quantity, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => Model.CartItems[i].SubTotal)
+                    </td>
+                </tr>
+            }
+        </table>
 
-    <div id="CheckoutInfo">
-        <p>SubTotal: $@(Model.GetSubTotal())</p>
-        <p>7% Tax: $@(Model.GetTax())</p>
-        <p>Total: $@(Model.GetTotal())</p>
-    </div>
+        <div class="text-right addTableAlignment">
+            <p>SubTotal: $@(Model.GetSubTotal())</p>
+            <p>7% Tax: $@(Model.GetTax())</p>
+            <p>Total: $@(Model.GetTotal())</p>
+        </div>
 
-    @Html.ActionLink("Go to checkout", "Checkout", new { })
-    <input type="submit" value="Save Order" />
-    @Html.ActionLink("Cancel Order", "CancelOrder")
-}
+        <div class="">
+            @Html.ActionLink("Checkout", "Checkout", new { }, new { @class = "btn btn-primary" })
+            <input type="submit" value="Save Order" class="btn btn-success"/>
+            @Html.ActionLink("Cancel", "CancelOrder", new { }, new { @class = "btn btn-danger" })
+        </div>
+    }
+</div>
