@@ -6,29 +6,59 @@
     .addTableAlignment {
         padding: 8px;
     }
+
+    hr {
+        width: 100%;
+    }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 640px) {
     .viewCartImg {
         width: 50px;
         height: 50px;
     }
 }
 
-@media screen and (min-width: 480px) {
-    .viewCartImg {
-        width: 100px;
-        height: 100px;
-    }
-
-
 @media screen and (min-width: 640px) {
     .viewCartImg {
         width: 100px;
         height: 100px;
     }
+
+    hr {
+        width: 50%;
+    }
 }
 
 .addTableAlignment {
     padding: 15px;
+}
+
+.leftLabel {
+    float: left;
+}
+
+span .inputAlignmentFix {
+    display: table-cell;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+    
+.inputWidthFix {
+    min-width:80px;
+    max-width:100px;
+}
+
+.checkoutLine {
+    clear: both;
+}
+
+.floatRight {
+    float: right;
+}
+
+hr {
+    border-top: 1px solid black;
 }

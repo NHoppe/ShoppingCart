@@ -5,32 +5,34 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="col-sm-offset-1 col-md-offset-2 col-lg-offset-3 col-xl-offset-4 col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+<div class="shoppingCartFix col-sm-offset-1 col-md-offset-2 col-lg-offset-2 col-xl-offset-4 col-xs-12 col-sm-10 col-md-8 col-lg-8 col-xl-4">
 
     <h2>Index</h2>
 
-    <table class="table table-striped">
+    <div class="table-responsive">
+        <table class="table table-striped">
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink("Add to Cart", "Add", new { prodId = item.productID }, new { @class = "btn btn-primary" })
-                </td>
-                <td>
-                    #@Html.DisplayFor(modelItem => item.productID)
-                </td>
-                <td>
-                    <img class="viewCartImg" src="~/Content/Images/Products/@(item.productID).png" alt="Product #@item.productID image" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.productName)
-                </td>
-                <td>
-                    $@Html.DisplayFor(modelItem => item.price)
-                </td>
-            </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink("Add to Cart", "Add", new { prodId = item.productID }, new { @class = "btn btn-primary" })
+                    </td>
+                    <td>
+                        #@Html.DisplayFor(modelItem => item.productID)
+                    </td>
+                    <td>
+                        <img class="viewCartImg" src="~/Content/Images/Products/@(item.productID).png" alt="Product #@item.productID image" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.productName)
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => item.price)
+                    </td>
+                </tr>
+            }
 
-    </table>
+        </table>
+    </div>
 </div>
